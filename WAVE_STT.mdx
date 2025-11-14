@@ -1,0 +1,71 @@
+title: "🎙️ Waves STT: Asynchronous Transcription" description: "A quick guide to file transcription using the Waves Speech-to-Text API." icon: "microphone"
+
+🎙️ Waves STT: Asynchronous Transcription
+
+The Waves Speech-to-Text (STT) API provides highly accurate, asynchronous transcription for pre-recorded audio files. This process returns a job ID, which you must use to retrieve the final transcript after processing is complete.
+
+⚡️ Quick Start: File Transcription
+
+Endpoint
+
+Parameter
+
+Value
+
+Method
+
+POST
+
+URL
+
+https://api.waves.ai/v1/transcribe
+
+Required Header
+
+Header
+
+Value / Type
+
+Description
+
+Authorization
+
+Bearer <YOUR_API_KEY>
+
+Required. Your Waves API key.
+
+Sample Request (Python)
+
+Send your audio file as multipart form data:
+
+import requests
+
+API_KEY = "YOUR_API_KEY"
+FILE_PATH = "path/to/my_audio.mp3"
+URL = "[https://api.waves.ai/v1/transcribe](https://api.waves.ai/v1/transcribe)"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}"
+}
+
+with open(FILE_PATH, 'rb') as f:
+    response = requests.post(URL, headers=headers, files={'file': f})
+
+if response.status_code == 202:
+    print("Job submitted successfully:", response.json())
+
+
+Sample Response (Job Submission)
+
+{
+  "job_id": "60a2b4f8-e1c3-4d5a-8b0f-9c7d2e1a4f3b",
+  "status": "in_progress",
+  "created_at": "2025-11-14T15:00:00Z"
+}
+
+
+Tip: Do not poll the job status endpoint immediately. Wait at least 5 seconds before checking the /jobs/{job_id} endpoint to avoid unnecessary rate limiting.
+
+Next Steps
+
+To complete the transcription process, you would now use the returned job_id to query the /jobs/{job_id} GET endpoint until the status changes to "completed".
